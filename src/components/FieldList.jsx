@@ -1,29 +1,10 @@
 // These will be available from the sidebar
 export const fields = [
-    {
-        type: "input",
-        title: "Text Input"
-    },
-    {
-        type: "select",
-        title: "Select"
-    },
-    {
-        type: "button",
-        title: "Button"
-    },
-    {
-        type: "textarea",
-        title: "Text Area"
-    },
-    {
-        type: "container",
-        title: "Container"
-    },
-    {
-        type: "form",
-        title: "Form"
-    }
+    { label: "Container", template: "Container" },
+    { label: "Text Input", template: "Input" },
+    { label: "Textarea", template: "Textarea" },
+    { label: "Checkbox", template: "Checkbox" },
+    { label: "Button", template: "Button" },
 ];
 
 
@@ -38,6 +19,6 @@ export const fieldRenderers = {
         </select>
     ,
     button: <button>Button</button>,
-    container: <div className="container"></div>,
-    form: <div className="form"></div>
+    container: (args) => <div className="container">{args}</div>,
+    form: (args) => <div className="form">{args}</div>
 };

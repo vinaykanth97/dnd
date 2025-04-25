@@ -1,21 +1,57 @@
-export function handleDragStart(e, setActiveData) {
-    console.log(e);
+import { TreeNode } from "./components/TreeNode";
 
-    setActiveData({
-        activeId: e.active.id,
-        activeType: e.active.data.current
-    })
+export function handleDragStart(e, setActiveData) {
+    const { active } = e;
+    const draggedNode = active.data.current?.node;
+    setActiveData(draggedNode)
+
 }
 export const handleDragOver = (e) => {
-    console.log(e);
+    // console.log(e);
 }
-export const handleDragEnd = (e, setActiveData, fieldAreaElements, SetFieldAreaElements) => {
+export const handleDragEnd = (e, setTree, activeData) => {
     const { active, over } = e;
-    console.log(over);
+    if (!active || !over) return;
 
-    if (over && over.data.current.accepts.includes(active.data.current.type)) {
-        SetFieldAreaElements([...fieldAreaElements, {
-            elements: active.data.current.type
-        }])
-    }
+    const draggedNode = activeData;
+    
+    const targetId = over.id?.toString().replace("drop-", "");
+    
+    if (!draggedNode || !targetId) return;
+
+    const insertNode = (node) => {
+        if (node.id.toString() === targetId) {
+            return {
+                ...node,
+                children: [
+                    ...node.children,
+                    {
+                        ...draggedNode,
+                        id: Math.random(), 
+                        children: draggedNode.template === "Container" ? [] : [],
+                    },
+                ],
+            };
+        }
+
+        
+
+        if (node.children?.length) {
+            return {
+                ...node,
+                children: node.children.map(insertNode),
+            };
+        }
+     
+        console.log(targetId);
+        
+        return node;
+    };
+
+    setTree((prevTree) => insertNode(prevTree));
+
 }
+
+export const renderTree = (node) => (
+    <TreeNode key={node.id} node={node} renderTree={renderTree} />
+);

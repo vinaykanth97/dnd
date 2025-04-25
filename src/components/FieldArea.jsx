@@ -1,31 +1,14 @@
-import { useDroppable } from '@dnd-kit/core';
-import { fieldRenderers } from './FieldList';
+
+import { renderTree } from '../EssentialFunc';
 
 
-function Droppable({ type }) {
-    const Components = fieldRenderers?.[type]
-    console.log(Components);
 
-
-    return Components
-}
-
-
-export const FieldArea = ({ acceptedFields, activeData, fieldAreaElements }) => {
-    const { setNodeRef } = useDroppable({
-        id: 'droppable-1',
-        data: {
-            accepts: acceptedFields,
-        },
-    });
-
+export const FieldArea = ({ tree }) => {
+    console.log(tree);
+    
     return (
-        <div className='box' ref={setNodeRef}>
-            {fieldAreaElements.map(area => {
-                return (
-                    <Droppable type={area?.elements} />
-                )
-            })}
+        <div className='box'>
+            {renderTree(tree)}
         </div>
     )
 }

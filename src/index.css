@@ -46,10 +46,10 @@
   cursor: grab;
 }
 
-.container {
+.Container {
   padding: 0 15px;
   outline: 1px blue solid;
-  min-height: 50px;
+  min-height: 100px;
   max-width: 99%;
   width: 100%;
   margin: 20px auto;

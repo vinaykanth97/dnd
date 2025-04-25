@@ -1,26 +1,31 @@
-import { nanoid } from "nanoid";
+
 import { fields } from "./FieldList"
 import { useDraggable } from "@dnd-kit/core";
-import { useRef } from "react";
 
 
 
-export function SideBarItem({ contents }) {
-    const id = useRef(nanoid());
-    const { attributes, listeners, setNodeRef } = useDraggable({
-        id: id.current,
+
+export function SideBarItem({ label, template }) {
+    const { setNodeRef, attributes, listeners } = useDraggable({
+        id: `${template}-${Math.random()}`,
         data: {
-            ...contents,
+            type: 'myItem',
+            node: {
+                id: Math.random(),
+                data: label,
+                template,
+                children: [],
+            },
         },
-        
     });
+
     return (
         <li
             ref={setNodeRef}
             {...attributes}
             {...listeners}
         >
-            {contents.title}
+            {label}
         </li>
     )
 
@@ -31,9 +36,11 @@ export function Sidebar() {
 
     return (
         <ul className="sidebarlist box" >
-            {fields.map((allFields, index) => {
+            {fields.map((item) => {
+
+
                 return (
-                    <SideBarItem key={index} contents={allFields} />
+                    <SideBarItem key={item.template} {...item} />
                 )
             })}
         </ul>
