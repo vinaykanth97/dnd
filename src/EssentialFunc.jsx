@@ -7,18 +7,43 @@ export function handleDragStart(e, setActiveData) {
 
 }
 export const handleDragOver = (e) => {
-    // console.log(e);
+    // console.log(e.over.id);
+
 }
+
+
+
 export const handleDragEnd = (e, setTree, activeData) => {
     const { active, over } = e;
-    if (!active || !over) return;
+    if (!active || !over) {
+        return
+    }
 
     const draggedNode = activeData;
-    
-    const targetId = over.id?.toString().replace("drop-", "");
-    
-    if (!draggedNode || !targetId) return;
+    const targetId = over.id
 
+    if (!draggedNode || !targetId) {
+        return;
+    }
+
+    // Remove the dragged node from tree
+    const removeDraggedNode = (node) => {
+        if (node.id === draggedNode.id) {
+            return null;
+        }
+        if (!node.children) return node;
+
+        const filteredChildren = node.children
+            .map(removeDraggedNode)
+            .filter(child => child !== null);
+
+        return {
+            ...node,
+            children: filteredChildren,
+        };
+    };
+
+    // Insert node function as before
     const insertNode = (node) => {
         if (node.id.toString() === targetId) {
             return {
@@ -27,14 +52,12 @@ export const handleDragEnd = (e, setTree, activeData) => {
                     ...node.children,
                     {
                         ...draggedNode,
-                        id: Math.random(), 
-                        children: draggedNode.template === "Container" ? [] : [],
+                        id: Math.random(),
+                        children: draggedNode.children ? draggedNode.children : [],
                     },
                 ],
             };
         }
-
-        
 
         if (node.children?.length) {
             return {
@@ -42,13 +65,17 @@ export const handleDragEnd = (e, setTree, activeData) => {
                 children: node.children.map(insertNode),
             };
         }
-     
-        console.log(targetId);
-        
         return node;
     };
 
-    setTree((prevTree) => insertNode(prevTree));
+    setTree((prevTree) => {
+        // Remove dragged node
+        const treeWithoutDragged = removeDraggedNode(prevTree);
+        if (!treeWithoutDragged) {
+            return prevTree;
+        }
+        return insertNode(treeWithoutDragged);
+    });
 
 }
 

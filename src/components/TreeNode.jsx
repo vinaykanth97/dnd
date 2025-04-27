@@ -3,12 +3,10 @@ import { CSS } from '@dnd-kit/utilities';
 
 export function TreeNode({ node, renderTree }) {
 
-
-
     const isContainer = node?.template === "Container";
 
     const { setNodeRef: dropRef } = useDroppable({
-        id: `drop-${node?.id}`,
+        id: `${node?.id}`,
         disabled: !isContainer,
     });
 

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 
 import {
   DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
 
 } from '@dnd-kit/core';
 
@@ -21,8 +24,17 @@ function App() {
     children: [],
   })
   const [activeData, setActiveData] = useState([])
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  )
+  console.log(tree);
+
   return (
-    <DndContext onDragOver={handleDragOver} onDragEnd={(e) => handleDragEnd(e, setTree, activeData)} onDragStart={(e) => handleDragStart(e, setActiveData)} >
+    <DndContext onDragOver={handleDragOver} onDragEnd={(e) => handleDragEnd(e, setTree, activeData)} onDragStart={(e) => handleDragStart(e, setActiveData)} sensors={sensors}>
       <div className="d-flex">
         <Sidebar />
         <FieldArea tree={tree} />
