@@ -5,6 +5,8 @@ export function TreeNode({ node, renderTree }) {
 
     const isContainer = node?.template === "Container";
 
+
+
     const { setNodeRef: dropRef } = useDroppable({
         id: `${node?.id}`,
         disabled: !isContainer,
@@ -25,6 +27,8 @@ export function TreeNode({ node, renderTree }) {
     };
 
     const renderContent = () => {
+
+
         switch (node?.template) {
             case "Input":
                 return <input type="text" placeholder="Text Input" disabled />;
@@ -38,16 +42,17 @@ export function TreeNode({ node, renderTree }) {
                 );
             case "Button":
                 return <button disabled>Button</button>;
+
             case "Container":
             default:
-                return <div>{node?.data}</div>;
+                return <div>{node?.template}</div>;
         }
     };
 
 
 
     return (
-        <div ref={dropRef} className="outline-boxes" style={{ marginLeft: "10px", height: "100%", outline: "1px solid blue" }}>
+        <div className={`outline-boxes ${node?.template}`} style={{ marginLeft: "10px", minHeight: "50px", outline: "1px solid blue" }}>
             <div
                 ref={dragRef}
                 {...attributes}
@@ -58,9 +63,15 @@ export function TreeNode({ node, renderTree }) {
             >
                 {renderContent()}
             </div>
-            {isContainer && (
-                <div>{node.children.map((child) => renderTree(child))}</div>
-            )}
+            {isContainer ? (
+                <>{node.children.map((child) => {
+                    return renderTree(child)
+                })}
+                    <div className="placeholder" ref={dropRef}>Drag any fields here</div>
+                </>
+            ) : <>
+            </>}
+
         </div>
     );
 }

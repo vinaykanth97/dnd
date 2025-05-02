@@ -12,6 +12,7 @@ import {
 import { Sidebar } from './components/Sidebar';
 import { FieldArea } from './components/FieldArea';
 import { handleDragOver, handleDragEnd, handleDragStart } from './EssentialFunc';
+import { snapCenterToCursor } from '@dnd-kit/modifiers';
 
 
 
@@ -34,7 +35,7 @@ function App() {
   console.log(tree);
 
   return (
-    <DndContext onDragOver={handleDragOver} onDragEnd={(e) => handleDragEnd(e, setTree, activeData)} onDragStart={(e) => handleDragStart(e, setActiveData)} sensors={sensors}>
+    <DndContext onDragOver={handleDragOver} onDragEnd={(e) => handleDragEnd(e, setTree, activeData)} onDragStart={(e) => handleDragStart(e, setActiveData)} sensors={sensors} modifiers={[snapCenterToCursor]}>
       <div className="d-flex">
         <Sidebar />
         <FieldArea tree={tree} />

@@ -8,7 +8,8 @@ export function handleDragStart(e, setActiveData) {
 }
 export const handleDragOver = (e) => {
     // console.log(e.over.id);
-
+    console.log(e.active.id);
+    
 }
 
 
